@@ -5,7 +5,9 @@ members = [
     "crates/usvg",
     "crates/usvg/codegen",
     #"tools/explorer-thumbnailer",
+    "crates/c-api/examples/svg_render_demo"
 ]
+
 default-members = ["crates/resvg"]
 resolver = "2"
 

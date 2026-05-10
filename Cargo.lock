@@ -579,6 +579,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "svg_render_demo"
+version = "0.1.0"
+dependencies = [
+ "resvg",
+]
+
+[[package]]
 name = "svgtypes"
 version = "0.16.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
