@@ -5,6 +5,16 @@ use tiny_skia_path::Rect;
 use usvg::Color;
 
 #[test]
+fn gradient_stop_offset_overflowing_f32() {
+    // `4e38` overflows f32 to infinity; parsing must not panic.
+    let svg = "<svg xmlns='http://www.w3.org/2000/svg'>\
+        <defs><linearGradient id='g'><stop offset='4e38'/></linearGradient></defs>\
+        <rect width='1' height='1' fill='url(#g)'/>\
+    </svg>";
+    assert!(usvg::Tree::from_str(svg, &usvg::Options::default()).is_ok());
+}
+
+#[test]
 fn clippath_with_invalid_child() {
     let svg = "
     <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'>
@@ -589,5 +599,35 @@ fn flattened_text_should_inherit_absolute_transform() {
     assert_eq!(
         path.bounding_box().transform(t).unwrap(),
         path.abs_bounding_box()
+    );
+}
+
+#[test]
+fn use_node_abs_transform() {
+    let svg = "
+    <svg viewBox='0 0 200 200'
+         xmlns='http://www.w3.org/2000/svg'
+         xmlns:xlink='http://www.w3.org/1999/xlink'>
+        <defs>
+            <rect id='rect1' x='0' y='0' width='100' height='100'/>
+        </defs>
+        <use xlink:href='#rect1' transform='matrix(0.5, 0, 0, 0.5, 20, 30)' />
+    </svg>
+    ";
+
+    let tree = usvg::Tree::from_str(&svg, &usvg::Options::default()).unwrap();
+
+    let usvg::Node::Group(group_node) = &tree.root().children()[0] else {
+        unreachable!()
+    };
+    assert_eq!(group_node.abs_transform().get_scale(), (0.5, 0.5));
+
+    let usvg::Node::Path(path_node) = &group_node.children()[0] else {
+        unreachable!()
+    };
+    assert_eq!(path_node.abs_transform().get_scale(), (0.5, 0.5));
+    assert_eq!(
+        path_node.abs_bounding_box(),
+        Rect::from_xywh(20.0, 30.0, 50.0, 50.0).unwrap()
     );
 }
