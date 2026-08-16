@@ -1131,6 +1131,7 @@ use crate::render;
 #[test] fn structure_image_no_width_and_height() { assert_eq!(render("tests/structure/image/no-width-and-height"), 0); }
 #[test] fn structure_image_no_width_on_svg() { assert_eq!(render("tests/structure/image/no-width-on-svg"), 0); }
 #[test] fn structure_image_no_width() { assert_eq!(render("tests/structure/image/no-width"), 0); }
+#[test] fn structure_image_objectBoundingBox_clip_on_sliced_image() { assert_eq!(render("tests/structure/image/objectBoundingBox-clip-on-sliced-image"), 0); }
 #[test] fn structure_image_preserveAspectRatio_eq_none_on_svg() { assert_eq!(render("tests/structure/image/preserveAspectRatio=none-on-svg"), 0); }
 #[test] fn structure_image_preserveAspectRatio_eq_none() { assert_eq!(render("tests/structure/image/preserveAspectRatio=none"), 0); }
 #[test] fn structure_image_preserveAspectRatio_eq_xMaxYMax_meet_on_svg() { assert_eq!(render("tests/structure/image/preserveAspectRatio=xMaxYMax-meet-on-svg"), 0); }
