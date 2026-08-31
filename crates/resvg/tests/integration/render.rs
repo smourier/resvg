@@ -81,6 +81,7 @@ use crate::render;
 #[test] fn filters_feComposite_invalid_operator() { assert_eq!(render("tests/filters/feComposite/invalid-operator"), 0); }
 #[test] fn filters_feComposite_operator_eq_arithmetic_and_invalid_k1_4() { assert_eq!(render("tests/filters/feComposite/operator=arithmetic-and-invalid-k1-4"), 0); }
 #[test] fn filters_feComposite_operator_eq_arithmetic_on_sRGB() { assert_eq!(render("tests/filters/feComposite/operator=arithmetic-on-sRGB"), 0); }
+#[test] fn filters_feComposite_operator_eq_arithmetic_with_huge_region() { assert_eq!(render("tests/filters/feComposite/operator=arithmetic-with-huge-region"), 0); }
 #[test] fn filters_feComposite_operator_eq_arithmetic_with_large_k1_4() { assert_eq!(render("tests/filters/feComposite/operator=arithmetic-with-large-k1-4"), 0); }
 #[test] fn filters_feComposite_operator_eq_arithmetic_with_opacity_on_sRGB() { assert_eq!(render("tests/filters/feComposite/operator=arithmetic-with-opacity-on-sRGB"), 0); }
 #[test] fn filters_feComposite_operator_eq_arithmetic_with_opacity() { assert_eq!(render("tests/filters/feComposite/operator=arithmetic-with-opacity"), 0); }
@@ -507,6 +508,8 @@ use crate::render;
 #[test] fn paint_servers_linearGradient_gradientUnits_eq_objectBoundingBox_with_percent() { assert_eq!(render("tests/paint-servers/linearGradient/gradientUnits=objectBoundingBox-with-percent"), 0); }
 #[test] fn paint_servers_linearGradient_gradientUnits_eq_userSpaceOnUse_with_percent() { assert_eq!(render("tests/paint-servers/linearGradient/gradientUnits=userSpaceOnUse-with-percent"), 0); }
 #[test] fn paint_servers_linearGradient_gradientUnits_eq_userSpaceOnUse() { assert_eq!(render("tests/paint-servers/linearGradient/gradientUnits=userSpaceOnUse"), 0); }
+#[test] fn paint_servers_linearGradient_href_precedence_over_xlink() { assert_eq!(render("tests/paint-servers/linearGradient/href-precedence-over-xlink"), 0); }
+#[test] fn paint_servers_linearGradient_href_with_invalid_prefix() { assert_eq!(render("tests/paint-servers/linearGradient/href-with-invalid-prefix"), 0); }
 #[test] fn paint_servers_linearGradient_hsla_color() { assert_eq!(render("tests/paint-servers/linearGradient/hsla-color"), 0); }
 #[test] fn paint_servers_linearGradient_invalid_child_1() { assert_eq!(render("tests/paint-servers/linearGradient/invalid-child-1"), 0); }
 #[test] fn paint_servers_linearGradient_invalid_child_2() { assert_eq!(render("tests/paint-servers/linearGradient/invalid-child-2"), 0); }
@@ -1128,6 +1131,7 @@ use crate::render;
 #[test] fn structure_image_no_width_and_height() { assert_eq!(render("tests/structure/image/no-width-and-height"), 0); }
 #[test] fn structure_image_no_width_on_svg() { assert_eq!(render("tests/structure/image/no-width-on-svg"), 0); }
 #[test] fn structure_image_no_width() { assert_eq!(render("tests/structure/image/no-width"), 0); }
+#[test] fn structure_image_objectBoundingBox_clip_on_sliced_image() { assert_eq!(render("tests/structure/image/objectBoundingBox-clip-on-sliced-image"), 0); }
 #[test] fn structure_image_preserveAspectRatio_eq_none_on_svg() { assert_eq!(render("tests/structure/image/preserveAspectRatio=none-on-svg"), 0); }
 #[test] fn structure_image_preserveAspectRatio_eq_none() { assert_eq!(render("tests/structure/image/preserveAspectRatio=none"), 0); }
 #[test] fn structure_image_preserveAspectRatio_eq_xMaxYMax_meet_on_svg() { assert_eq!(render("tests/structure/image/preserveAspectRatio=xMaxYMax-meet-on-svg"), 0); }
@@ -1198,6 +1202,8 @@ use crate::render;
 #[test] fn structure_svg_nested_svg_with_rect_and_viewBox_and_percent_values() { assert_eq!(render("tests/structure/svg/nested-svg-with-rect-and-viewBox-and-percent-values"), 0); }
 #[test] fn structure_svg_nested_svg_with_rect() { assert_eq!(render("tests/structure/svg/nested-svg-with-rect"), 0); }
 #[test] fn structure_svg_nested_svg_with_relative_width_and_height() { assert_eq!(render("tests/structure/svg/nested-svg-with-relative-width-and-height"), 0); }
+#[test] fn structure_svg_nested_svg_with_transform_and_clip() { assert_eq!(render("tests/structure/svg/nested-svg-with-transform-and-clip"), 0); }
+#[test] fn structure_svg_nested_svg_with_transform_and_opacity() { assert_eq!(render("tests/structure/svg/nested-svg-with-transform-and-opacity"), 0); }
 #[test] fn structure_svg_nested_svg_with_viewBox_and_percent_values() { assert_eq!(render("tests/structure/svg/nested-svg-with-viewBox-and-percent-values"), 0); }
 #[test] fn structure_svg_nested_svg_with_viewBox() { assert_eq!(render("tests/structure/svg/nested-svg-with-viewBox"), 0); }
 #[test] fn structure_svg_nested_svg() { assert_eq!(render("tests/structure/svg/nested-svg"), 0); }
@@ -1302,6 +1308,7 @@ use crate::render;
 #[test] fn structure_use_duplicated_IDs() { assert_eq!(render("tests/structure/use/duplicated-IDs"), 0); }
 #[test] fn structure_use_fill_opacity_inheritance() { assert_eq!(render("tests/structure/use/fill-opacity-inheritance"), 0); }
 #[test] fn structure_use_from_defs() { assert_eq!(render("tests/structure/use/from-defs"), 0); }
+#[test] fn structure_use_href_precedence_over_xlink() { assert_eq!(render("tests/structure/use/href-precedence-over-xlink"), 0); }
 #[test] fn structure_use_href_without_the_xlink_namespace() { assert_eq!(render("tests/structure/use/href-without-the-xlink-namespace"), 0); }
 #[test] fn structure_use_indirect_recursive_1() { assert_eq!(render("tests/structure/use/indirect-recursive-1"), 0); }
 #[test] fn structure_use_indirect_recursive_2() { assert_eq!(render("tests/structure/use/indirect-recursive-2"), 0); }

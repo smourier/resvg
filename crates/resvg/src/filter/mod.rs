@@ -365,6 +365,13 @@ fn apply_inner(
         .map(|r| r.to_int_rect())
         .ok_or(Error::InvalidRegion)?;
 
+    // The source pixmap is clamped to `max_bbox` in `render_group`, so the filter
+    // region (derived directly from the unclamped filter rect) can be larger than
+    // the buffer we actually render into.
+    let source_rect =
+        IntRect::from_xywh(0, 0, source.width(), source.height()).ok_or(Error::InvalidRegion)?;
+    let region = crate::geom::fit_to_rect(region, source_rect).ok_or(Error::InvalidRegion)?;
+
     let mut results: Vec<FilterResult> = Vec::new();
 
     for primitive in filter.primitives() {
@@ -1076,13 +1083,13 @@ fn transform_light_source(
             let mut point = tiny_skia::Point::from_xy(light.x, light.y);
             ts.map_point(&mut point);
             light.x = point.x - region.x() as f32;
-            light.y = point.y - region.x() as f32;
+            light.y = point.y - region.y() as f32;
             light.z *= sz;
 
             let mut point = tiny_skia::Point::from_xy(light.points_at_x, light.points_at_y);
             ts.map_point(&mut point);
             light.points_at_x = point.x - region.x() as f32;
-            light.points_at_y = point.y - region.x() as f32;
+            light.points_at_y = point.y - region.y() as f32;
             light.points_at_z *= sz;
         }
     }

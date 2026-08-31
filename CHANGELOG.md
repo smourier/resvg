@@ -8,7 +8,62 @@ This changelog also contains important changes in dependencies.
 
 ## [Unreleased]
 
-This release has an MSRV of 1.87.0 for `usvg` and `resvg` and the C API.
+## [0.48.1] 2026-08-02
+
+This release has an MSRV of 1.85.0 for `usvg` and `resvg` and the C API.
+
+### Changed
+
+- MSRV lowered from 1.89 to 1.85. (#1109)
+- Downgraded strict-num dependency to 0.1.1. This prevents duplicate versions from being included (#1110)
+
+### Fixed
+
+- Fixed an `as_mut_slice` future-compatibility warning. (#1108)
+
+## [0.48.0] 2026-07-31
+
+This release has an MSRV of 1.89.0 for `usvg` and `resvg` and the C API.
+
+The big change in this release is that text support is now backed by
+[`skrifa`](https://github.com/googlefonts/fontations) and
+[`harfrust`](https://github.com/harfbuzz/harfrust) rather than
+[`ttf-parser`](https://github.com/harfbuzz/ttf-parser) and
+[`rustybuzz`](https://github.com/harfbuzz/rustybuzz):
+
+- Moves resvg onto an actively maintained font stack.
+- Should have faster and more correct text rendering.
+- Will enable further improvements to things like variable font rendering in future.
+- May impact binary size (expected +~500kb for people not otherwise including fontations dependencies in their tree).
+- May result in small rendering changes compared to older versions of resvg.
+
+### Added
+
+- New `svgz` and `writer` feature gates to reduce the number of required dependencies. (#1088 by @reed-smout)
+- Warnings when parsing malformed paths. (#1011)
+- A `Display` implementation for `Units`. (#986)
+
+### Changed
+
+- MSRV bumped from 1.87 to 1.89. The requirement comes from `font-types`.
+- Text shaping now uses `harfrust` instead of `rustybuzz`, and font parsing uses `skrifa` (fontations) instead of `ttf-parser`. (#922 by @nicoburns)
+- Filter input dimension checks are now debug-only assertions. (#991)
+
+### Fixed
+
+- Glyph advances are now calculated correctly. (#1043 by @fundon)
+- Text nodes now inherit their absolute transform. (#1040 by @fundon)
+- Fixes related to non-finite values. (#1049 by @SAY-5)
+- Transforms are no longer applied twice in `abs_transform`. (#1056 by @fundon)
+- `fr` is now resolved for radial gradients referenced via `href`. (#1098 by @T1mVo)
+- Panic in `feComposite` with the `arithmetic` operator when the filter region is larger than the clamped layer. (#1021, #1007)
+- Application of `transform` (and other group properties like `opacity`) on a nested `svg`
+  element.
+- The missing dimension of an `svg` with only `width` or `height` specified is now computed from its `viewBox` aspect ratio. (#1045)
+- The `wght` variation coordinate is now set even when `font-weight` has its default value. (#1099)
+- The unprefixed `href` attribute now takes precedence over the deprecated `xlink:href` when both are present, as required by SVG 2. (#1015)
+- Incorrect y-axis offsets when transforming `feSpotLight` sources. (#1052)
+- Panics caused by bounding boxes that exceed the supported integer range. (#989)
 
 ## [0.47.0] 2026-02-05
 
@@ -1340,7 +1395,9 @@ This release has an MSRV of 1.65 for `usvg` and 1.67.1 for `resvg` and the C API
 
 [#897]: https://github.com/linebender/resvg/pull/897
 
-[Unreleased]: https://github.com/linebender/resvg/compare/v0.47.0...HEAD
+[Unreleased]: https://github.com/linebender/resvg/compare/v0.48.1...HEAD
+[0.48.1]: https://github.com/linebender/resvg/compare/v0.48.0...v0.48.1
+[0.48.0]: https://github.com/linebender/resvg/compare/v0.47.0...v0.48.0
 [0.47.0]: https://github.com/linebender/resvg/compare/v0.46.0...v0.47.0
 [0.46.0]: https://github.com/linebender/resvg/compare/v0.45.1...v0.46.0
 [0.45.1]: https://github.com/linebender/resvg/compare/v0.45.0...v0.45.1
