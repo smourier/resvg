@@ -1277,3 +1277,55 @@ impl log::Log for SimpleLogger {
 
     fn flush(&self) {}
 }
+
+// GUARD_EXPORTS_PANIC_SAFE, a panic that unwinds across an extern "C" boundary is UB and
+// aborts the whole host process, so every exported function must run its body inside ffi_try,
+// which catches the unwind and returns a safe default. this test fails the build if a new
+// export is added without that guard, so the crash-safety principle survives upstream merges.
+#[cfg(test)]
+mod guard_exports_panic_safe
+{
+    #[test]
+    fn every_c_export_is_wrapped_in_ffi_try()
+    {
+        let src = include_str!("lib.rs");
+
+        // scan only the code above this module, so the marker strings written below cannot
+        // be mistaken for real exports being checked.
+        let code = src.split("GUARD_EXPORTS_PANIC_SAFE").next().unwrap();
+
+        let marker = "extern \"C\" fn";
+        let mut offenders = Vec::new();
+
+        for (idx, _) in code.match_indices(marker)
+        {
+            let name = code[idx + marker.len()..]
+                .split('(')
+                .next()
+                .unwrap_or("")
+                .trim();
+
+            let rest = &code[idx + marker.len()..];
+            let end = rest.find(marker).map_or(code.len(), |n| idx + marker.len() + n);
+            let body = &code[idx..end];
+
+            if !body.contains("ffi_try(")
+            {
+                offenders.push(name.to_string());
+            }
+        }
+
+        assert!(
+            offenders.is_empty(),
+            "these exported C functions are not wrapped in ffi_try, a panic could cross the FFI boundary and abort the host process: {offenders:?}"
+        );
+
+        // guard against the scan itself silently breaking, a marker or layout change that
+        // matched nothing would otherwise let this test pass while checking zero exports.
+        let export_count = code.matches(marker).count();
+        assert!(
+            export_count >= 10,
+            "export guard scanned only {export_count} functions, the scan or file layout likely changed"
+        );
+    }
+}
